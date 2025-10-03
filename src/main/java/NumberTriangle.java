@@ -88,15 +88,16 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        NumberTriangle current = this;
-        for (char c : path.toCharArray()) {
-            if (c == 'l') {
-                current = current.left;
-            } else if (c == 'r') {
-                current = current.right;
+        NumberTriangle curr = this;
+        for (int i = 0; i < path.length(); i++) {
+            char ch = path.charAt(i);
+            if (ch == 'l') {
+                curr = curr.left;   // assume well-formed path per spec
+            } else if (ch == 'r') {
+                curr = curr.right;
             }
         }
-        return current.root;
+        return curr.root;
     }
 
     /** Read in the NumberTriangle structure from a file.
@@ -116,7 +117,7 @@ public class NumberTriangle {
         InputStream inputStream = NumberTriangle.class.getClassLoader().getResourceAsStream(fname);
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 
-        NumberTriangle[] prevRow = null;
+        NumberTriangle[] prev = null;
 
         // will need to return the top of the NumberTriangle,
         // so might want a variable for that.
@@ -129,15 +130,15 @@ public class NumberTriangle {
             for (int i = 0; i < parts.length; i++) {
                 currRow[i] = new NumberTriangle(Integer.parseInt(parts[i]));
             }
-            if (prevRow != null) {
-                for (int i = 0; i < prevRow.length; i++) {
-                    prevRow[i].setLeft(currRow[i]);
-                    prevRow[i].setRight(currRow[i + 1]);
+            if (prev != null) {
+                for (int i = 0; i < prev.length; i++) {
+                    prev[i].setLeft(currRow[i]);
+                    prev[i].setRight(currRow[i + 1]);
                 }
             } else {
                 top = currRow[0];
             }
-            prevRow = currRow;
+            prev = currRow;
             //read the next line
             line = br.readLine();
         }
